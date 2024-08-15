@@ -9,7 +9,7 @@ const client = new Client({ node: "http://localhost:9200" });
 
 // Define the /products route
 app.get("/products", async (req, res) => {
-  const { query, sortBy, sortMethod } = req.query;
+  const { query, sortBy, sortMethod, page = 1, size = 10 } = req.query;
 
   if (!query) {
     return res.status(400).send({ error: "Query parameter is required" });
@@ -31,6 +31,8 @@ app.get("/products", async (req, res) => {
           },
         },
         sort: [sortObject],
+        from: (page - 1) * size,
+        size,
       },
     });
 
